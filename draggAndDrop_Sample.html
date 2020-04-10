@@ -1,0 +1,59 @@
+<!DOCTYPE html> 
+<html lang="ja"> 
+<head> 
+<meta charset=utf-8>
+<title>ドラッグ＆ドロップ　サンプル</title>
+<style>
+#screen_parts {
+  /*単なるスタイリング*/
+  width:100px; height:500px; margin:20px; background-color:#FF9966; border:1px solid #cc3333;
+  float: left;
+}
+#dropbox {
+  /*単なるスタイリング*/
+  width:1000px; height:500px; margin:20px; background-color:#CCFF66; border:1px solid #00cc00;
+  /*以下はwebkit系ブラウザでドラッグ＆ドロップを動かすための指定（ブラウザのサポートが進めば、必要なくなると思われます）*/
+  -khtml-user-drag: element;
+  float: left;
+}
+</style>
+<script>
+/***** ドラッグ開始時の処理 *****/
+function f_dragstart(event){
+  //ドラッグするデータのid名をDataTransferオブジェクトにセット
+  event.dataTransfer.setData("text", event.target.id);
+}
+
+/***** ドラッグ要素がドロップ要素に重なっている間の処理 *****/
+function f_dragover(event){
+  //dragoverイベントをキャンセルして、ドロップ先の要素がドロップを受け付けるようにする
+  event.preventDefault();
+}
+
+/***** ドロップ時の処理 *****/
+function f_drop(event){
+  //ドラッグされたデータのid名をDataTransferオブジェクトから取得
+  var id_name = event.dataTransfer.getData("text");
+  //id名からドラッグされた要素を取得
+  var drag_elm =document.getElementById(id_name);
+  //ドロップ先にドラッグされた要素を追加
+  event.currentTarget.appendChild(drag_elm);
+  //エラー回避のため、ドロップ処理の最後にdropイベントをキャンセルしておく
+  event.preventDefault();
+}
+</script>
+</head>
+<body>
+
+<p>画面部品</p>
+<div id="screen_parts" ondragover="f_dragover(event)" ondrop="f_drop(event)">
+<img src="images/button.gif" id="button" alt="ボタン" draggable="true" ondragstart="f_dragstart(event)">
+<img src="images/text_box.gif" id="text_box" alt="テキストボックス" draggable="true" ondragstart="f_dragstart(event)">
+<img src="images/check_box.gif" id="check_box" alt="チェックボックス" draggable="true" ondragstart="f_dragstart(event)">
+</div>
+
+<div id="dropbox" ondragover="f_dragover(event)" ondrop="f_drop(event)">
+</div>
+
+</body>
+</html>
