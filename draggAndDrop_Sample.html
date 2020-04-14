@@ -30,12 +30,11 @@ $(function() {
       helper: 'clone',
       revert: 'invalid',
     });
-    $( ".dragged" ).draggable({
-      cancel: null
-    });
     $( "#dropbox" ).droppable({
       "hoverClass":'gray',
       drop: function( event, ui ) {
+        var div_elm =$("<div></div>")
+        div_elm.addClass("dragged");
         if (ui.draggable.hasClass("label")) {
             var add_elm =$("<input>", {type: "text",
                                        "maxlength": "5",
@@ -43,6 +42,8 @@ $(function() {
                                        "value":"ラベル"
                                        });
             add_elm.addClass("label_parts");
+            add_elm =div_elm.html(add_elm);
+            add_elm.prependTo(this).css({"position":"absolute",top:event.clientY,left:event.clientX});
         }
         else if (ui.draggable.hasClass("text")) {
             var add_elm =$("<input>", {type: "text",
@@ -51,9 +52,13 @@ $(function() {
                                        "disabled":"true"
                                        });
            add_elm.addClass("text_parts");
+           add_elm =div_elm.html(add_elm);
+           add_elm.prependTo(this).css({"position":"absolute",top:event.clientY,left:event.clientX});
         }
-        add_elm.addClass("dragged");
-        add_elm.prependTo(this).css({"position":"absolute",top:event.clientY,left:event.clientX});
+        //add_elm.addClass("dragged");
+        $( ".dragged" ).draggable({
+          cancel: null
+        });
       }
     });
   });
