@@ -23,37 +23,36 @@
   background-color:#CCFF66;
   border-style:none
 }
-
-#pop input {
-  position: relative;
+.toumei {
+    display:none;
+    width: auto;
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	background-color: #eeeeee;
+    float:left;
+    font-size: small;
 }
-
-.arrow_box {
-  display: none;
-  position: absolute;
-  padding: 16px;
-  -webkit-border-radius: 8px;
-  -moz-border-radius: 8px;
-  border-radius: 8px;
-  background: #333;
-  color: #fff;
+li a {
+	display: block;
+	padding: 4px 4px;
+	text-decoration: none;
+	color: #000000;
 }
-
-.arrow_box:after {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  margin-left: -10px;
-  border: solid transparent;
-  border-color: rgba(51, 51, 51, 0);
-  border-bottom-color: #333;
-  border-width: 10px;
-  pointer-events: none;
-  content: " ";
+.center {
+	text-align: center;
 }
-
+li:last-child {
+	border-bottom: none;
+}
+li a.active {
+	color: #ffffff;
+	background-color: #da3c41;
+}
+li a:hover:not(.active) {
+	color: #ffffff;
+	background-color: #1b2538;
+}
 </style>
 <script>
 $(function() {
@@ -61,48 +60,50 @@ $(function() {
       helper: 'clone',
       revert: 'invalid',
     });
+
     $( "#dropbox" ).droppable({
-      "hoverClass":'gray',
-      drop: function( event, ui ) {
-        var div_elm =$("<div></div>")
-        div_elm.attr('id', 'pop');
-        div_elm.addClass("dragged");
-        if (ui.draggable.hasClass("label")) {
-            var add_elm =$("<input>", {type: "text",
-                                       "maxlength": "5",
-                                       "size":"10",
-                                       "value":"ラベル"
-                                       });
-            add_elm.addClass("label_parts");
+        "hoverClass":'gray',
+        drop: function( event, ui ) {
+            var div_elm =$("<div></div>")
+            div_elm.addClass("dragged");
+            div_elm.attr('id', 'display-submenu');
+            if (ui.draggable.hasClass("label")) {
+                var add_elm =$("<input>", {type: "text",
+                                        "maxlength": "5",
+                                        "size":"10",
+                                        "value":"ラベル"
+                                        });
+                add_elm.addClass("label_parts");
+                add_elm =div_elm.html(add_elm);
+                add_elm.prependTo(this).css({"position":"absolute",top:event.clientY,left:event.clientX});
+            }
+            else if (ui.draggable.hasClass("text")) {
+                var add_elm =$("<input>", {type: "text",
+                                        "maxlength": "5",
+                                        "size":"10",
+                                        "disabled":"true"
+                                        });
+            add_elm.addClass("text_parts");
             add_elm =div_elm.html(add_elm);
-            add_elm.prependTo(this).css({"position":"absolute",top:event.clientY,left:event.clientX});
-            $('<p class="arrow_box">ふきだし1</p>').appendTo('div');
+            add_elm.prependTo(this).css({"position":"absolute",top:event.clientY-10,left:event.clientX-10});
+            }
+            //add_elm.addClass("dragged");
+            $( ".dragged" ).draggable({
+            cancel: null
+            });
         }
-        else if (ui.draggable.hasClass("text")) {
-            var add_elm =$("<input>", {type: "text",
-                                       "maxlength": "5",
-                                       "size":"10",
-                                       "disabled":"true"
-                                       });
-           add_elm.addClass("text_parts");
-           add_elm =div_elm.html(add_elm);
-           add_elm.prependTo(this).css({"position":"absolute",top:event.clientY,left:event.clientX});
-        }
-        //add_elm.addClass("dragged");
-        $( ".dragged" ).draggable({
-          cancel: null
-        });
-        $('input').hover(function() {
-            $(this).next('p').show();
-        }, function(){
-            $(this).next('p').hide();
-        });
-      }
     });
+
+    // クリックしたらメニューを表示する
+    $('div').on('click','#display-submenu',function(){
+        $(".toumei").css({"position":"absolute",top:event.clientY,left:event.clientX,"display":"block"});
+    });
+
   });
 </script>
 </head>
 <body>
+
     <p>画面部品</p>
     <div id="screen_parts">
         <ul class="parts_list" itemscope="">
@@ -115,7 +116,16 @@ $(function() {
         </ul>
     </div>
 
+
+
+
     <div id="dropbox">
+    </div>
+
+    <div>
+        <ul class="toumei center" id="sabMenu">
+            <li><a class="active" href="#home">入力</a></li>
+        </ul>
     </div>
 
 </body>
