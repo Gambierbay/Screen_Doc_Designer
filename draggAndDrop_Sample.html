@@ -55,6 +55,9 @@ li a:hover:not(.active) {
 }
 </style>
 <script>
+
+let partsCount = 0;
+
 $(function() {
     $( ".draggable" ).draggable({
       helper: 'clone',
@@ -66,7 +69,7 @@ $(function() {
         drop: function( event, ui ) {
             var div_elm =$("<div></div>")
             div_elm.addClass("dragged");
-            div_elm.attr('id', 'display-submenu');
+            div_elm.attr('id', 'display-submenu_' + partsCount);
             if (ui.draggable.hasClass("label")) {
                 var add_elm =$("<input>", {type: "text",
                                         "maxlength": "5",
@@ -91,12 +94,16 @@ $(function() {
             $( ".dragged" ).draggable({
             cancel: null
             });
+            console.log(partsCount);
+            partsCount++;
         }
     });
 
     // クリックしたらメニューを表示する
-    $('div').on('click','#display-submenu',function(){
+    $('div').on('click',"[ id ^= 'display-submenu']",function(){
         $(".toumei").css({"position":"absolute",top:event.clientY,left:event.clientX,"display":"block"});
+        // クリックした要素のIDをコンソールに表示する
+        console.log($(this).attr('id'));
     });
 
   });
