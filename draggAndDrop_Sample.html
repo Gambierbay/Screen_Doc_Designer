@@ -79,6 +79,7 @@ $(function() {
                 add_elm.addClass("label_parts");
                 add_elm =div_elm.html(add_elm);
                 add_elm.prependTo(this).css({"position":"absolute",top:event.clientY,left:event.clientX});
+                partsCount++;
             }
             else if (ui.draggable.hasClass("text")) {
                 var add_elm =$("<input>", {type: "text",
@@ -89,13 +90,12 @@ $(function() {
             add_elm.addClass("text_parts");
             add_elm =div_elm.html(add_elm);
             add_elm.prependTo(this).css({"position":"absolute",top:event.clientY-10,left:event.clientX-10});
+            partsCount++;
             }
             //add_elm.addClass("dragged");
             $( ".dragged" ).draggable({
             cancel: null
             });
-            console.log(partsCount);
-            partsCount++;
         }
     });
 
