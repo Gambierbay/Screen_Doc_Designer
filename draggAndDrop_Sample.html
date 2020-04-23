@@ -6,6 +6,7 @@
 <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
 <script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
 <style>
+
 #screen_parts {
   /*単なるスタイリング*/
   width:100px; height:500px; margin:20px; background-color:#FF9966; border:1px solid #cc3333;
@@ -24,6 +25,16 @@
   border-style:none
 }
 .toumei {
+    display:none;
+    width: auto;
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	background-color: #eeeeee;
+    float:left;
+    font-size: small;
+}
+.input {
     display:none;
     width: auto;
 	margin: 0;
@@ -57,6 +68,7 @@ li a:hover:not(.active) {
 <script>
 
 let partsCount = 0;
+var id = '';
 
 $(function() {
     $( ".draggable" ).draggable({
@@ -96,17 +108,33 @@ $(function() {
             $( ".dragged" ).draggable({
             cancel: null
             });
+            partsCount++;
         }
     });
 
     // クリックしたらメニューを表示する
     $('div').on('click',"[ id ^= 'display-submenu']",function(){
         $(".toumei").css({"position":"absolute",top:event.clientY,left:event.clientX,"display":"block"});
+        // クリックしたら要素のIDを取得する
+        partsId = $(this).attr('id');
+        id = $(this).attr('id');
         // クリックした要素のIDをコンソールに表示する
         console.log($(this).attr('id'));
     });
-
-  });
+    // メニューをクリックしたら入力フォームを表示する
+    $('div').on('click',"#input-form",function(){
+        //  メニューを非表示にする
+        $(".toumei").css("display","none");
+        // 入力フォームを表示する
+        $(".input").css({"position":"absolute",top:event.clientY,left:event.clientX,"display":"block",value:""});
+    });
+    // OKボタンクリック時
+    function clickBtn1(){
+        // 値を取得
+        document.getElementById("text4").value = "blue";
+        $('#'.id).css(value,"aaa");
+    }
+});
 </script>
 </head>
 <body>
@@ -131,9 +159,12 @@ $(function() {
 
     <div>
         <ul class="toumei center" id="sabMenu">
-            <li><a class="active" href="#home">入力</a></li>
+            <li><a class="active" href="#home" id="input-form">入力</a></li>
         </ul>
+        <div>
+            <ul class="input center" id="input">
+                <li><input type="text" name="form" class="form" value="" id="a" /><button type="button" onclick="clickBtn1()">OK</button></li>
+            </ul>
+        </div>
     </div>
 
-</body>
-</html>
