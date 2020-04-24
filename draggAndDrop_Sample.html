@@ -68,7 +68,10 @@ li a:hover:not(.active) {
 <script>
 
 let partsCount = 0;
+let idCounts = 0;
 var id = '';
+var p = '';
+var name = '';
 
 $(function() {
     $( ".draggable" ).draggable({
@@ -86,12 +89,16 @@ $(function() {
                 var add_elm =$("<input>", {type: "text",
                                         "maxlength": "5",
                                         "size":"10",
-                                        "value":"ラベル"
+                                        "value":"ラベル",
                                         });
                 add_elm.addClass("label_parts");
+
+                add_elm.attr('id', 'input-submenu_' + idCounts);
+
                 add_elm =div_elm.html(add_elm);
                 add_elm.prependTo(this).css({"position":"absolute",top:event.clientY,left:event.clientX});
                 partsCount++;
+                idCounts++;
             }
             else if (ui.draggable.hasClass("text")) {
                 var add_elm =$("<input>", {type: "text",
@@ -101,24 +108,28 @@ $(function() {
                                         });
             add_elm.addClass("text_parts");
             add_elm =div_elm.html(add_elm);
-            add_elm.prependTo(this).css({"position":"absolute",top:event.clientY-10,left:event.clientX-10});
+            add_elm.prependTo(this).css({"position":"absolute",top:event.clientY,left:event.clientX});
             partsCount++;
+            idCounts++;
             }
             //add_elm.addClass("dragged");
             $( ".dragged" ).draggable({
             cancel: null
             });
             partsCount++;
+            idCounts++;
         }
     });
 
     // クリックしたらメニューを表示する
     $('div').on('click',"[ id ^= 'display-submenu']",function(){
         $(".toumei").css({"position":"absolute",top:event.clientY,left:event.clientX,"display":"block"});
-        // クリックしたら要素のIDを取得する
-        partsId = $(this).attr('id');
+        // 要素のIDを取得する
         id = $(this).attr('id');
-        // クリックした要素のIDをコンソールに表示する
+        p = $('#'+id).children("p");
+        name = $(p).attr('id');
+        // name = $('input').attr('id', 'input-submenu_0');
+        // 要素のIDをコンソールに表示する
         console.log($(this).attr('id'));
     });
     // メニューをクリックしたら入力フォームを表示する
@@ -128,13 +139,14 @@ $(function() {
         // 入力フォームを表示する
         $(".input").css({"position":"absolute",top:event.clientY,left:event.clientX,"display":"block",value:""});
     });
-    // OKボタンクリック時
-    function clickBtn1(){
-        // 値を取得
-        document.getElementById("text4").value = "blue";
-        $('#'.id).css(value,"aaa");
-    }
 });
+// OKボタンクリック時
+function clickBtn1(){
+    // 値を取得
+    const t1 = document.form1.form.value;
+    document.getElementById(name).value = t1;
+    console.log(t1);
+}
 </script>
 </head>
 <body>
@@ -161,10 +173,10 @@ $(function() {
         <ul class="toumei center" id="sabMenu">
             <li><a class="active" href="#home" id="input-form">入力</a></li>
         </ul>
-        <div>
+        <form name="form1">
             <ul class="input center" id="input">
-                <li><input type="text" name="form" class="form" value="" id="a" /><button type="button" onclick="clickBtn1()">OK</button></li>
+                <li><input type="text" name="form" class="form" value="" id="a" /><input type="button" value="OK" onclick="clickBtn1()"/></li>
             </ul>
-        </div>
+        </form>
     </div>
 
