@@ -3,6 +3,7 @@
 <head>
 <meta charset=utf-8>
 <title>ドラッグ＆ドロップ　サンプル</title>
+<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css"/> 
 <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
 <script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
 <style>
@@ -95,6 +96,7 @@ $(function() {
                 add_elm.attr('id', 'input-submenu_' + idCounts); // 子要素にID付与
                 add_elm =div_elm.html(add_elm);
                 add_elm.prependTo(this).css({"position":"absolute",top:event.clientY,left:event.clientX});
+                $("#"+'input-submenu_' + idCounts).resizable();
                 partsCount++;
                 idCounts++;
             }
@@ -107,14 +109,16 @@ $(function() {
             add_elm.addClass("text_parts");
             add_elm =div_elm.html(add_elm);
             add_elm.prependTo(this).css({"position":"absolute",top:event.clientY,left:event.clientX});
+            $("#"+'input-submenu_' + idCounts).resizable();
             partsCount++;
             idCounts++;
             }
             $( ".dragged" ).draggable({
             cancel: null
             });
-            partsCount++;
-            idCounts++;
+            // ドラッグ時にもカウントが増えてしまうので削除
+            // partsCount++;
+            // idCounts++;
         }
     });
 
@@ -123,8 +127,7 @@ $(function() {
         $(".transparent").css({"position":"absolute",top:event.clientY,left:event.clientX,"display":"block"});
         // 要素のIDを取得する
         parentId = $(this).attr('id');
-        inputElement = $('#'+ parentId).children("input");
-        childrenId = $(inputElement).attr('id');
+        childrenId = $('#'+ parentId).find("input").attr("id");
     });
     // メニューをクリックしたら入力フォームを表示する
     $('div').on('click',"#input-form",function(){
@@ -137,15 +140,18 @@ $(function() {
 // OKボタンクリック時
 function clickBtn1(){
     // 値を取得
-    var t1 = document.form1.form.value;
-    document.getElementById(childrenId).value = t1;
+    // jqueryを使用する形に変更
+    //var t1 = document.form1.input.form.value;
+    //document.getElementById(childrenId).value = t1;
     //  入力フォームを非表示にする
+    var t1 = $('#inputText').attr('value');
+    $('#' + childrenId).attr('value',t1);
     $(".input").css("display","none");
 }
 // サイズ変更
-$(function(){
-  $("[ id ^= 'display-submenu']").resizable();
-});
+//$(function(){
+//  $("[ id ^= 'display-submenu']").resizable();
+//});
 
 </script>
 </head>
@@ -175,7 +181,7 @@ $(function(){
         </ul>
         <form name="form1">
             <ul class="input center" id="input">
-                <li><input type="text" name="form" class="form" value="" id="a" /><input type="button" value="OK" onclick="clickBtn1()"/></li>
+                <li><input type="text" name="form" class="form" value="" id="inputText" /><input type="button" value="OK" onclick="clickBtn1()"/></li>
             </ul>
         </form>
     </div>
