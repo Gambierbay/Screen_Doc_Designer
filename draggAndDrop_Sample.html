@@ -43,6 +43,9 @@
     float:left;
     /* font-size: 200px; */
 }
+.form2 li {
+    font-size: small;
+}
 /* .input .form1 {
     display:none;
     width: auto;
@@ -59,12 +62,12 @@
     /* font-size: 200px; */
 }
 .liform2 {
-    width: 5px;
-	background-color: blue;
+    width: 10px;
+	background-color: #eeeeee;
 }
 .liform3 {
     width: 20px;
-	background-color: red;
+	background-color: #eeeeee;
 }
 
 li a {
@@ -158,19 +161,24 @@ $(function() {
         childrenId = $('#'+ parentId).find("input").attr("id");
     });
 
-    // 入力フォームを表示する
+
     $('div').on('click',"#input-form",function(){
         //  メニューを非表示にする
         $(".transparent").css("display","none");
-        // 入力フォームを表示する
-        $(".form1").css({"position":"absolute",top:event.clientY,left:event.clientX,"display":"block",value:""});
+        // ラベルの入力フォームを表示する
+        $(".form1").css({"position":"absolute",top:event.clientY,left:event.clientX,"display":"block"});
     });
-    // 文字サイズの入力フォームを表示する
+
+    $('div').on('click',"#input-position",function(){
+        $(".transparent").css("display","none");
+        // 文字位置の選択フォームを表示する
+        $(".form2").css({"position":"absolute",top:event.clientY,left:event.clientX,"display":"block"});
+    });
+
     $('div').on('click',"#input-fontsize",function(){
-        //  メニューを非表示にする
         $(".transparent").css("display","none");
         // 文字サイズの入力フォームを表示する
-        $(".form3").css({"position":"absolute",top:event.clientY,left:event.clientX,"display":"block",value:""});
+        $(".form3").css({"position":"absolute",top:event.clientY,left:event.clientX,"display":"block"});
     });
 });
 
@@ -182,15 +190,34 @@ function clickBtn1($kindOfId,$kinfOfClass){
         // 値を取得
         var content = $('#' + $kindOfId).attr('value');
         $('#' + childrenId).attr('value',content);
-    // } else if($kindOfId=='textPosition'){ //「文字の位置」を選択
-    //     pass;
+    } else if($kindOfId=='textPosition'){ //「文字の位置」を選択
+        // チェックされた値を取得
+        // var position = $('#' + $kindOfId).attr('value');
+        var radios = document.getElementsByName($kinfOfClass);
+
+        //取得したラジオボタンオブジェクトから選択されたものを探し出す
+        var result;
+        for(var i=0; i<radios.length; i++){
+            if (radios[i].checked) {
+            //選択されたラジオボタンのvalue値を取得する
+            result = radios[i].value;
+            break;
+            }
+        }
+
+
+        if(result!='') { //選択がある場合
+            // 文字の位置の設定
+            $('#' + parentId).css('text-align',result);
+        }
+
     } else if($kindOfId=='textSize'){ //「文字のサイズ」を選択
         // 入力された数値を取得
         var size = $('#' + $kindOfId).attr('value');
 
         if(!isNaN(size)){ //数値判定
             // 文字のサイズの設定
-            $('#' + childrenId).attr('font-size',size+'px');
+            $('#' + childrenId).css('font-size',size+'px');
         } else {
             var $message = '数字を入力してください';
             return $message;
@@ -238,8 +265,10 @@ function clickBtn1($kindOfId,$kinfOfClass){
         </form>
         <form name="form2">
             <ul class="form2 center" id="input">
-                <li><input type="text" name="liform2" class="liform2" value="" id="textPosition" />
-                    <input type="button" value="OK" onclick="clickBtn1()"/>
+                <li><input type="radio" name="liform2" class="liform2" value="left" id="textPosition" />左寄り
+                    <input type="radio" name="liform2" class="liform2" value="center" id="textPosition" />中央
+                    <input type="radio" name="liform2" class="liform2" value="right" id="textPosition" />右寄り
+                    <input type="button" value="OK" onclick="clickBtn1('textPosition','liform2')"/>
                 </li>
             </ul>
         </form>
